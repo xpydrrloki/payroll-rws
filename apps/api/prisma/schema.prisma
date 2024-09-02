@@ -19,3 +19,153 @@ model Sample {
 
   @@map("samples") // if you want to use snake_case format
 }
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  username String
+  password String
+  role     Role
+
+  @@map("users")
+}
+
+enum Role {
+  SUPERADMIN @map("SUPERADMIN")
+  PERSONALIA @map("PERSONALIA")
+  ADMIN      @map("ADMIN")
+}
+
+model Department {
+  id       Int        @id @default(autoincrement())
+  name     String
+  JobTitle JobTitle[]
+  Employee Employee?
+
+  @@map("departments")
+}
+
+model JobTitle {
+  id           Int     @id @default(autoincrement())
+  name         String
+  description  String? @db.LongText
+  departmentId Int
+
+  department Department @relation(fields: [departmentId], references: [id])
+  Employee   Employee?
+
+  @@map("job_titles")
+}
+
+enum EmployeeType {
+  KARYAWAN_LEPAS @map("KARYAWAN_LEPAS")
+  KARYAWAN_TETAP @map("KARYAWAN_TETAP")
+}
+
+model Employee {
+  id           Int          @id @default(autoincrement())
+  name         String
+  employeeType EmployeeType
+  address      String
+  phoneNumber  String
+  hiringDate   DateTime
+  updatedAt    DateTime     @updatedAt
+  deletedAt    DateTime?
+  departmentId Int          @unique
+  jobTitleId   Int          @unique
+
+  department Department   @relation(fields: [departmentId], references: [id])
+  jobTitle   JobTitle     @relation(fields: [jobTitleId], references: [id])
+  Overtime   Overtime[]
+  Attendance Attendance[]
+
+  @@map("employees")
+}
+
+enum OvertimeType {
+  HARI_KERJA @map("HARI_KERJA")
+  HARI_LIBUR @map("HARI_LIBUR")
+}
+
+model Overtime {
+  id         Int          @id @default(autoincrement())
+  date       DateTime
+  workHours  Int
+  type       OvertimeType
+  employeeId Int
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("overtimes")
+}
+
+enum AttendanceStatus {
+  HADIR   @map("HADIR")
+  MANGKIR @map("MANGKIR")
+  SAKIT   @map("SAKIT")
+  CUTI    @map("CUTI")
+}
+
+model Attendance {
+  id         Int              @id @default(autoincrement())
+  date       DateTime
+  status     AttendanceStatus
+  employeeId Int
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("attendances")
+}
+
+model Payroll {
+  id               Int                @id @default(autoincrement())
+  baseSalary       Int
+  payDate          DateTime
+  netPay           Int
+  TunjanganPayroll TunjanganPayroll[]
+  PotonganPayroll  PotonganPayroll[]
+
+  @@map("payrolls")
+}
+
+model Tunjangan {
+  id               Int                @id @default(autoincrement())
+  name             String
+  description      String             @db.LongText
+  TunjanganPayroll TunjanganPayroll[]
+
+  @@map("tunjangan")
+}
+
+model TunjanganPayroll {
+  id          Int @id @default(autoincrement())
+  payrollId   Int
+  tunjanganId Int
+  amount      Int
+
+  payroll   Payroll   @relation(fields: [payrollId], references: [id])
+  tunjangan Tunjangan @relation(fields: [tunjanganId], references: [id])
+
+  @@map("tunjangan_payroll")
+}
+
+model Potongan {
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String            @db.LongText
+  PotonganPayroll PotonganPayroll[]
+
+  @@map("potongan")
+}
+
+model PotonganPayroll {
+  id         Int @id @default(autoincrement())
+  payrollId  Int
+  potonganId Int
+  amount     Int
+
+  payroll  Payroll  @relation(fields: [payrollId], references: [id])
+  potongan Potongan @relation(fields: [potonganId], references: [id])
+
+  @@map("potongan_payroll")
+}
