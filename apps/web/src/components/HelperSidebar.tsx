@@ -2,7 +2,7 @@ import { CalendarClock, HandCoins, Home, UsersRound } from 'lucide-react';
 
 export const listSuper = [
   { name: 'Home', url: '/', icon: <Home size={20} /> },
-  { name: 'Data Karyawan', url: '/employee', icon: <UsersRound size={20} /> },
+  { name: 'Data Karyawan', url: '/employees', icon: <UsersRound size={20} /> },
   {
     name: 'Presensi & Lembur',
     url: '/attendance',

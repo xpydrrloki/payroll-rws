@@ -5,8 +5,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 import Logo from './Logo';
 import { LogOut } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
+import { toast } from 'sonner';
 
 export const Sidebar = () => {
+  const { username, role } = useAuthStore((state) => state.user);
+  const logoutAction = useAuthStore((state) => state.logoutAction);
   const router = useRouter();
   const pathname = usePathname();
   return (
@@ -36,14 +40,20 @@ export const Sidebar = () => {
         </div>
         <div className="w-full flex flex-col gap-6 ">
           <div className="items-start flex flex-col justify-between h-full gap-y-2 px-4">
-            <p className="text-xl">Username</p>
-            <p className="text-lg font-bold">Role</p>
+            <p className="text-xl">{username}</p>
+            <p className="text-lg font-bold">{role}</p>
           </div>
           <div>
             <Button
               variant="link"
               className="w-fit justify-start gap-4 px-4 py-3 text-red-500"
-              // onClick={() => (provider === 'GOOGLE' ? logout() : userLogout())}
+              onClick={() => {
+                localStorage.removeItem('Authorization');
+                localStorage.removeItem('token');
+                logoutAction();
+                router.push('/login');
+                toast.warning("Anda sudah ter-logout.")
+              }}
             >
               <LogOut size={20} />
               Logout
