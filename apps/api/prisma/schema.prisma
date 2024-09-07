@@ -40,7 +40,7 @@ model Department {
   id       Int        @id @default(autoincrement())
   name     String
   JobTitle JobTitle[]
-  Employee Employee?
+  Employee Employee[]
 
   @@map("departments")
 }
@@ -52,7 +52,7 @@ model JobTitle {
   departmentId Int
 
   department Department @relation(fields: [departmentId], references: [id])
-  Employee   Employee?
+  Employee   Employee[]
 
   @@map("job_titles")
 }
@@ -66,18 +66,19 @@ model Employee {
   id           Int          @id @default(autoincrement())
   name         String
   employeeType EmployeeType
-  address      String
-  phoneNumber  String
+  address      String?
+  phoneNumber  String?
   hiringDate   DateTime
   updatedAt    DateTime     @updatedAt
   deletedAt    DateTime?
-  departmentId Int          @unique
-  jobTitleId   Int          @unique
+  departmentId Int          
+  jobTitleId   Int          
 
   department Department   @relation(fields: [departmentId], references: [id])
   jobTitle   JobTitle     @relation(fields: [jobTitleId], references: [id])
   Overtime   Overtime[]
   Attendance Attendance[]
+  Payroll    Payroll[]
 
   @@map("employees")
 }
@@ -118,10 +119,13 @@ model Attendance {
 }
 
 model Payroll {
-  id               Int                @id @default(autoincrement())
-  baseSalary       Int
-  payDate          DateTime
-  netPay           Int
+  id         Int      @id @default(autoincrement())
+  baseSalary Int
+  payDate    DateTime
+  netPay     Int
+  employeeId Int
+
+  employee         Employee           @relation(fields: [employeeId], references: [id])
   TunjanganPayroll TunjanganPayroll[]
   PotonganPayroll  PotonganPayroll[]
 

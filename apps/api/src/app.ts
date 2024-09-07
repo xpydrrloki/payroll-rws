@@ -9,6 +9,7 @@ import express, {
 import cors from 'cors';
 import { PORT } from './config';
 import { AuthRouter } from './routers/auth.router';
+import { EmployeeRouter } from './routers/employee.router';
 
 export default class App {
   private app: Express;
@@ -51,12 +52,14 @@ export default class App {
 
   private routes(): void {
     const authRouter = new AuthRouter();
+    const employeeRouter = new EmployeeRouter();
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Welcome to Personalia Application`);
     });
 
     this.app.use('/api/auth', authRouter.getRouter());
+    this.app.use('/api/employee', employeeRouter.getRouter());
   }
 
   public start(): void {

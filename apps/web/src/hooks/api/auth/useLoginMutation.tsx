@@ -13,11 +13,16 @@ const useLoginMutation = () => {
   const router = useRouter();
   return useMutation({
     mutationFn: async (payload: { username: string; password: string }) => {
-      return await axiosInstance.post('/auth/login', payload);
+      try {
+        const {data} = await axiosInstance.post('/auth/login', payload);
+        return data
+      } catch (error) {
+        throw error;
+      }
     },
     onSuccess: async (data) => {
-      const user = data.data.data;
-      const token = data.data.token;
+      const user = data.data;
+      const token = data.token;
       const payload = { ...user, token };
       loginAction(payload);
       localStorage.setItem('Authorization', `Bearer ${token}`);
@@ -27,7 +32,7 @@ const useLoginMutation = () => {
       router.push('/');
     },
     onError: (error: AxiosError<string>) => {
-      toast.error(error.response?.data);
+      toast.error(error.response?.data || error.message);
     },
   });
 };

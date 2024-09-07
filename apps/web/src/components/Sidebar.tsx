@@ -14,7 +14,7 @@ export const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
   return (
-    <nav className="sticky top-0 z-50 flex w-full flex-row items-center justify-between gap-4 border-b-2 bg-white px-5 py-6 md:h-screen md:max-w-[240px] md:flex-col md:justify-start md:border-b-0 md:border-r-2">
+    <nav className="sticky top-0 z-50 flex  flex-row items-center justify-between gap-4 border-b-2 bg-white px-5 py-6 md:h-screen w-[240px] md:flex-col md:justify-start md:border-b-0 md:border-r-2">
       <div className="flex flex-col items-center justify-between h-full w-full gap-2">
         <div className="flex w-full flex-col items-center gap-2">
           <div className="mb-10 py-4 text-main-black">
