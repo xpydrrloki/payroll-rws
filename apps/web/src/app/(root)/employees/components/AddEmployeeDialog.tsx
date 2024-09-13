@@ -43,7 +43,11 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
   console.log('ini jobs', jobs);
 
   const [date, setDate] = useState<Date | undefined>();
-  const { mutateAsync, isPending } = useCreateEmployee();
+  const {
+    mutateAsync,
+    isPending,
+    isError: isErrorMutation,
+  } = useCreateEmployee();
   const {
     handleBlur,
     handleChange,
@@ -71,9 +75,11 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
       };
 
       await mutateAsync(payload);
-      await refetchEmployees();
-      resetForm();
-      setOpen(false);
+      if (!isErrorMutation) {
+        await refetchEmployees();
+        resetForm();
+        setOpen(false);
+      }
     },
   });
   // console.log(jobs[0]);
@@ -151,7 +157,7 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
                   isError={!!touched.employeeType && !!errors.employeeType}
                 />
               </div>
-             
+
               <div className="flex justify-between gap-x-6 w-full">
                 <div className="my-3 flex w-full flex-col space-y-1.5 h-fit z-30">
                   <Label

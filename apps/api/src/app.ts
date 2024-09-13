@@ -11,6 +11,8 @@ import { PORT } from './config';
 import { AuthRouter } from './routers/auth.router';
 import { EmployeeRouter } from './routers/employee.router';
 import { JobRouter } from './routers/job.router';
+import { AttendanceRouter } from './routers/attendance.router';
+import { scheduleAttendanceTask } from './libs/scheduleAttendance';
 
 export default class App {
   private app: Express;
@@ -20,6 +22,7 @@ export default class App {
     this.configure();
     this.routes();
     this.handleError();
+    this.schedules()
   }
 
   private configure(): void {
@@ -55,6 +58,7 @@ export default class App {
     const authRouter = new AuthRouter();
     const employeeRouter = new EmployeeRouter();
     const jobRouter = new JobRouter();
+    const attendanceRouter = new AttendanceRouter()
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Welcome to Personalia Application`);
@@ -63,6 +67,11 @@ export default class App {
     this.app.use('/api/auth', authRouter.getRouter());
     this.app.use('/api/employee', employeeRouter.getRouter());
     this.app.use('/api/job', jobRouter.getRouter());
+    this.app.use('/api/attendance', attendanceRouter.getRouter());
+  }
+  private schedules(): void{
+  //  scheduleAttendanceTask()
+  // JANGAN LUPA DINYALAIN LAGI
   }
 
   public start(): void {
