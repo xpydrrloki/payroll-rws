@@ -1,4 +1,5 @@
 import { jwtSecretKey } from '@/config';
+import prisma from '@/prisma';
 import { Role, User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { TokenExpiredError, verify } from 'jsonwebtoken';
@@ -15,14 +16,23 @@ declare global {
   }
 }
 
-export const verifyRole = (req: Request, res: Response, next: NextFunction) => {
-  const role: Role = res.locals.user.role;
+export const verifyUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const id: number = res.locals.user.id;
+  try {
+    const user = await prisma.user.findFirst({ where: { id } });
 
-  if (role == 'ADMIN') {
-    return res.status(401).send({
-      message:
+    if (!user) {
+      throw new Error(
         'User tidak memiliki otorisasi untuk melakukan tindakan ini.',
-    });
+      );
+    }
+  } catch (error) {
+    throw error;
   }
+
   next();
 };

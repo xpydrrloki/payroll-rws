@@ -48,9 +48,9 @@ export const Sidebar = () => {
               variant="link"
               className="w-fit justify-start gap-4 px-4 py-3 text-red-500"
               onClick={() => {
+                logoutAction();
                 localStorage.removeItem('Authorization');
                 localStorage.removeItem('token');
-                logoutAction();
                 router.push('/login');
                 toast.warning("Anda sudah ter-logout.")
               }}

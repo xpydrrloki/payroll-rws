@@ -10,9 +10,10 @@ export default function AuthGuardCustomer(Component: any) {
     const logoutAction = useAuthStore((state) => state.logoutAction);
 
     const token =
-      typeof window !== 'undefined'
-        ? localStorage.getItem('Authorization')
-        : null;
+    typeof window !== 'undefined'
+      ? localStorage.getItem('token')
+      : null;
+
     const { role, id } = useAuthStore((state) => state.user);
 
     useEffect(() => {
@@ -22,8 +23,11 @@ export default function AuthGuardCustomer(Component: any) {
     });
 
     useEffect(() => {
-      if ((!role && !isLoading) || !token) {
+      // const token = localStorage.getItem('token');
+      if (!id && !token) {
         logoutAction();
+        localStorage.removeItem("Authorization")
+        localStorage.removeItem("token")
         redirect('/login');
       }
     }),

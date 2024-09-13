@@ -7,33 +7,27 @@ import { useEffect } from 'react';
 
 const useAxios = () => {
   const logoutAction = useAuthStore((state) => state.logoutAction);
-  const token =
-    typeof window !== 'undefined'
-      ? localStorage.getItem('Authorization')
-      : null;
-  const parsedToken = token?.split(' ')[1];
-  const router = useRouter();
 
   useEffect(() => {
+    const token = window.localStorage.getItem('token');
     const requestIntercept = axiosInstance.interceptors.request.use(
       (config) => {
         if (token) {
-          config.headers.Authorization = `Bearer ${parsedToken}`;
+          config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
-      (error: AxiosError) => {
+      (error) => {
         return Promise.reject(error);
       },
     );
-
     const responseIntercept = axiosInstance.interceptors.response.use(
       (response) => response,
       (err: AxiosError) => {
         if (err?.response?.status === 401) {
+          logoutAction();
           localStorage.removeItem('Authorization');
           localStorage.removeItem('token');
-          logoutAction();
         }
         return Promise.reject(err);
       },
@@ -43,7 +37,7 @@ const useAxios = () => {
       axiosInstance.interceptors.request.eject(requestIntercept);
       axiosInstance.interceptors.request.eject(responseIntercept);
     };
-  }, []);
+  }, [window.localStorage, logoutAction]);
 
   return { axiosInstance };
 };

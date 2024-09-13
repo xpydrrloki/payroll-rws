@@ -10,6 +10,7 @@ import cors from 'cors';
 import { PORT } from './config';
 import { AuthRouter } from './routers/auth.router';
 import { EmployeeRouter } from './routers/employee.router';
+import { JobRouter } from './routers/job.router';
 
 export default class App {
   private app: Express;
@@ -53,6 +54,7 @@ export default class App {
   private routes(): void {
     const authRouter = new AuthRouter();
     const employeeRouter = new EmployeeRouter();
+    const jobRouter = new JobRouter();
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Welcome to Personalia Application`);
@@ -60,6 +62,7 @@ export default class App {
 
     this.app.use('/api/auth', authRouter.getRouter());
     this.app.use('/api/employee', employeeRouter.getRouter());
+    this.app.use('/api/job', jobRouter.getRouter());
   }
 
   public start(): void {

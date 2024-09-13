@@ -1,6 +1,8 @@
 import { AuthController } from '@/controllers/auth.controller';
 import { EmployeeController } from '@/controllers/employee.controller';
+import { verifyRole } from '@/middlewares/verifyRole';
 import { verifyToken } from '@/middlewares/verifyToken';
+import { verifyUser } from '@/middlewares/verifyUser';
 import { Router } from 'express';
 
 export class EmployeeRouter {
@@ -14,7 +16,18 @@ export class EmployeeRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.get('/', verifyToken,this.employeeController.getEmployeeController);
+    this.router.get(
+      '/',
+      verifyToken,
+      this.employeeController.getEmployeeController,
+    );
+    this.router.post(
+      '/',
+      verifyToken,
+      verifyUser,
+      verifyRole,
+      this.employeeController.createEmployeeController,
+    );
   }
 
   getRouter(): Router {

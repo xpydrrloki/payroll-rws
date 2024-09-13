@@ -1,35 +1,49 @@
 'use client';
 import useGetEmployees from '@/hooks/api/employee/useGetEmployees';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import EmployeeTable from './components/EmployeeTable';
 import Pagination from '@/components/Pagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import AddEmployeeDialog from './components/AddEmployeeDialog';
+import AuthGuardCustomer from '@/hoc/AuthGuard';
 
 const Employees = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const [page, setPage] = useState<number>(
-    Number(searchParams.get('page')) || 1,
-  );
+  // const initialPage = Math.ceil(Number(searchParams.get('page'))) || 1;
+  const initialPage = searchParams.get('page')
+    ? Math.ceil(Number(searchParams.get('page')))
+    : 1;
+  const [page, setPage] = useState<number>(initialPage);
 
-  const { data, status, isLoading, error } = useGetEmployees({
+  const { data, status, isLoading, error , refetch:refetchEmployees} = useGetEmployees({
     page,
     take: 10,
   });
+  // const handleChangePaginate = ({ selected }: { selected: number }) => {
+  //   setPage(selected + 1);
+  // };
   const handleChangePaginate = ({ selected }: { selected: number }) => {
+    const newPage = selected + 1;
+
+    // Update the page state
+    setPage(newPage);
+
+    // Update the URL without reloading the page
     const params = new URLSearchParams(searchParams);
-    if (selected == page) {
-      params.set('page', String(selected + 1));
-    } else {
-      params.delete('page');
-    }
+    params.set('page', String(newPage));
     router.replace(`${pathname}?${params}`);
-    setPage(selected + 1);
   };
+
+  useEffect(() => {
+    const currentPage = Number(searchParams.get('page')) || 1;
+    if (currentPage !== page) {
+      setPage(currentPage);
+    }
+  }, [searchParams]);
   return (
     <main className="container px-8 py-12">
       <h2 className="mx-auto mb-4 max-w-6xl text-2xl font-bold">Employees</h2>
@@ -37,9 +51,9 @@ const Employees = () => {
         {isLoading || !data ? (
           <div>Loading...</div>
         ) : (
-          <div className='px-4'>
+          <div className="px-4">
             <div className="flex justify-end mx-2 ">
-              <AddEmployeeDialog/>
+              <AddEmployeeDialog refetchEmployees={refetchEmployees}/>
             </div>
             <EmployeeTable employees={data.data} />
           </div>
@@ -56,4 +70,4 @@ const Employees = () => {
   );
 };
 
-export default Employees;
+export default AuthGuardCustomer(Employees);

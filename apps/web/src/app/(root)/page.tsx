@@ -1,3 +1,5 @@
+"use client"
+import AuthGuardCustomer from '@/hoc/AuthGuard'
 import React from 'react'
 
 const HomePage = () => {
@@ -6,4 +8,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default AuthGuardCustomer(HomePage)
