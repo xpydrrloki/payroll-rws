@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { Sidebar } from '@/components/Sidebar';
 import AuthGuardCustomer from '@/hoc/AuthGuard';
 import { FC, ReactNode } from 'react';
@@ -16,4 +16,4 @@ const AuthLayout: FC<RootLayoutProps> = ({ children }) => {
   );
 };
 
-export default AuthGuardCustomer(AuthLayout);
+export default AuthLayout;

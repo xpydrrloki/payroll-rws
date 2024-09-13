@@ -1,9 +1,11 @@
+"use client"
+import AuthGuardCustomer from '@/hoc/AuthGuard'
 import React from 'react'
 
 const HomePage = () => {
   return (
-    <div>Home</div>
+    <main className='container mx-auto px-4'>Home</main>
   )
 }
 
-export default HomePage
+export default AuthGuardCustomer(HomePage)
