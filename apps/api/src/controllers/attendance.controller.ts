@@ -18,6 +18,7 @@ export class AttendanceController {
         search: (req.query.search as string) || '',
         jobTitleId: parseInt(req.query.jobTitleId as string) || undefined,
         departmentId: parseInt(req.query.departmentId as string) || undefined,
+        date: (req.query.date as string) || undefined
 
         // employeeId: parseInt(req.query.employeeId as string),
       };

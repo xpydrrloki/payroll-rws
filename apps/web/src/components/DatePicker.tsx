@@ -16,10 +16,15 @@ import { Label } from './ui/label';
 
 interface DatePickerProps {
   date: Date | undefined;
-  setDate: Dispatch<SetStateAction<Date | undefined>>;
+  setDate:
+    | Dispatch<SetStateAction<Date | undefined>>
+    | ((date: Date | undefined) => void);
   isError?: boolean;
   name: string;
   label?: string;
+  fromYear?: number;
+  toYear?: number;
+  captionLayout: 'dropdown' | 'buttons' | 'dropdown-buttons' | undefined;
 }
 
 const DatePicker: FC<DatePickerProps> = ({
@@ -28,13 +33,12 @@ const DatePicker: FC<DatePickerProps> = ({
   name,
   isError,
   label,
+  captionLayout,
+  fromYear,
+  toYear,
 }) => {
-  const newDate = new Date();
-  const fromYear = newDate.getFullYear() - 50;
-  const toYear = newDate.getFullYear();
-
   return (
-    <div className='my-3 flex w-full flex-col space-y-1.5'>
+    <div className="my-3 flex w-full flex-col space-y-1.5">
       <Label htmlFor={name} className={isError ? 'text-red-600' : ''}>
         {label}
       </Label>
@@ -63,7 +67,7 @@ const DatePicker: FC<DatePickerProps> = ({
             onSelect={setDate}
             initialFocus
             showOutsideDays={false}
-            captionLayout="dropdown"
+            captionLayout={captionLayout}
             fromYear={fromYear}
             toYear={toYear}
           />

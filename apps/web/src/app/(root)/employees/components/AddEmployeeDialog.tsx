@@ -40,7 +40,9 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
   const { role } = useAuthStore((state) => state.user);
   const employeeType = ['KARYAWAN_TETAP', 'KARYAWAN_LEPAS'];
   const { data: jobs, isLoading } = useGetJobs();
-  console.log('ini jobs', jobs);
+  const newDate = new Date();
+  const fromYear = newDate.getFullYear() - 50;
+  const toYear = newDate.getFullYear();
 
   const [date, setDate] = useState<Date | undefined>();
   const {
@@ -142,6 +144,9 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
                   name="hiringDate"
                   label="Mulai Kerja"
                   isError={!!touched.hiringDate && !!errors.hiringDate}
+                  captionLayout="dropdown"
+                  fromYear={fromYear}
+                  toYear={toYear}
                 />
                 <SelectInput
                   field={{

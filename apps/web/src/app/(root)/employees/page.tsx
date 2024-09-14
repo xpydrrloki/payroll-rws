@@ -13,7 +13,6 @@ const Employees = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  // const initialPage = Math.ceil(Number(searchParams.get('page'))) || 1;
   const initialPage = searchParams.get('page')
     ? Math.ceil(Number(searchParams.get('page')))
     : 1;
@@ -23,9 +22,6 @@ const Employees = () => {
     page,
     take: 10,
   });
-  // const handleChangePaginate = ({ selected }: { selected: number }) => {
-  //   setPage(selected + 1);
-  // };
   const handleChangePaginate = ({ selected }: { selected: number }) => {
     const newPage = selected + 1;
 
@@ -49,7 +45,7 @@ const Employees = () => {
       <h2 className="mx-auto mb-4 max-w-6xl text-2xl font-bold">Data Karyawan</h2>
       <div className="container mx-auto rounded-lg mb-10 min-h-[640px] max-h-[720px] min-w-[840px] max-w-6xl border-2 bg-white py-4 shadow-xl flex flex-col justify-between">
         {isLoading || !data ? (
-          <div>Loading...</div>
+          <div className='p-4 mx-auto my-16'><h3 className='font-light text-2xl'>Mengambil Data...</h3></div>
         ) : (
           <div className="px-4">
             <div className="flex justify-end mx-2 ">
