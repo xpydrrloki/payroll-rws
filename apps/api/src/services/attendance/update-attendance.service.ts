@@ -10,7 +10,7 @@ export const updateAttendanceService = async (body:{id:number, status:Attendance
         }
         const updateData = await prisma.attendance.update({
             where:{id},
-            data:{status}
+            data:{...body}
         })
         return {message:"Data presensi berhasil diubah."}
     } catch (error) {

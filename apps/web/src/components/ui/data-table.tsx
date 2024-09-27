@@ -17,21 +17,31 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from './button';
+import { useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  enableRowSelection?: boolean;
 }
 
-export function DataTable<TData, TValue>({
+export const DataTable = <TData, TValue>({
   columns,
   data,
-}: DataTableProps<TData, TValue>) {
+  enableRowSelection = false,
+}: DataTableProps<TData, TValue>) => {
+  const [rowSelection, setRowSelection] = useState({});
+  
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    // getPaginationRowModel: getPaginationRowModel(),
+    onRowSelectionChange: setRowSelection,
+    state: {
+      rowSelection: enableRowSelection ? rowSelection : undefined,
+    },
   });
 
   return (
@@ -60,8 +70,10 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
+                key={row.id}
+                data-state={
+                  enableRowSelection && row.getIsSelected() && 'selected'
+                }  
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -88,4 +100,4 @@ export function DataTable<TData, TValue>({
       </div>
     </div>
   );
-}
+};

@@ -5,15 +5,12 @@ import React, { useEffect, useState } from 'react';
 import AttendanceTable from './components/AttendanceTable';
 import Pagination from '@/components/Pagination';
 import DatePicker from '@/components/DatePicker';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
+
 import useGetJobs from '@/hooks/api/jobs/useGetJobs';
+import JobSelect from '@/components/JobSelect';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import EnableUpdateSwitch from './components/EnableUpdateSwitch';
 
 const Attendance = () => {
   const searchParams = useSearchParams();
@@ -28,7 +25,9 @@ const Attendance = () => {
   const [page, setPage] = useState<number>(initialPage);
   const [departmentId, setDepartmentId] = useState<number>(0);
   const [jobTitleId, setJobTitleId] = useState<number>(0);
+  const [enableUpdate, setEnableUpdate] =useState<boolean>(false)
   const [date, setDate] = useState<Date | undefined>(initialDate);
+  const [multiSelect, setMultiSelect] = useState<boolean>(false);
   const { data: jobs, isLoading: isLoadingJobs } = useGetJobs();
   const {
     data,
@@ -38,11 +37,13 @@ const Attendance = () => {
     refetch: refetchAttendance,
   } = useGetAttendance({
     page,
-    take: 10,
+    take: 20,
     date: date?.toISOString(),
     departmentId,
-    jobTitleId
+    jobTitleId,
   });
+  console.log(data?.data.length);
+
   const handleChangePaginate = ({ selected }: { selected: number }) => {
     const newPage = selected + 1;
 
@@ -79,67 +80,41 @@ const Attendance = () => {
       <h2 className="mx-auto mb-4 max-w-6xl text-2xl font-bold">
         Presensi & Lembur
       </h2>
-      <div className="container mx-auto rounded-lg mb-10 min-h-[640px] max-h-[720px] min-w-[840px] max-w-6xl border-2 bg-white py-4 shadow-xl flex flex-col justify-between">
-        {isLoadingAttQuery || !data || isLoadingJobs || !jobs ? (
+      <div className="container mx-auto rounded-lg mb-10 min-h-[640px]  min-w-[840px] max-w-6xl border-2 bg-white py-4 shadow-xl flex flex-col justify-between">
+        {isLoadingAttQuery || !data ? (
           <div className="p-4 mx-auto my-16">
             <h3 className="font-light text-2xl">Mengambil Data...</h3>
           </div>
         ) : (
           <div className="px-4">
-            <div className="flex justify-start mx-2 items-center">
-              {/* <AddEmployeeDialog refetchEmployees={refetchEmployees}/> */}
+            <div className="flex mx-2 items-center justify-around gap-x-4">
               <DatePicker
                 captionLayout="buttons"
                 date={date}
                 setDate={handleDateChange}
                 name=""
+                disabled={{ after: new Date() }}
               />
-              <div className="flex items-center gap-x-8">
-                <div className="w-48">
-                  <Label htmlFor={'departmentId'}>{'Departemen'}</Label>
-                  <Select
-                    name="departmentId"
-                    onValueChange={(value) => setDepartmentId(Number(value))}
-                    defaultValue={String(departmentId)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={'Pilih Departemen'} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {jobs?.map((job, idx) => (
-                        <SelectItem key={idx} value={String(job.id)}>
-                          {job.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div
-                  className={`${departmentId == 0 ? 'w-0 text-transparent border-none' : 'w-48 '} transition-all duration-200`}
-                >
-                  <Label htmlFor={'jobTitleId'}>{'Jabatan'}</Label>
-                  <Select name='jobTitleId' onValueChange={(val)=>setJobTitleId(Number(val))}
-                    value={String(jobTitleId)}>
-                    <SelectTrigger
-                      className={`${departmentId == 0 ? 'w-0 hidden border-none' : 'w-48 '} transition-all duration-200`}
-                    >
-                      <SelectValue placeholder={'Pilih Jabatan'} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {jobs[
-                        departmentId == 0 ? 0 : departmentId - 1
-                      ].JobTitle.map((title, idx) => (
-                        <SelectItem key={idx} value={String(title.id)}>
-                          {title.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              {/* <div>asdasd</div> */}
+              <EnableUpdateSwitch switchState={enableUpdate} setSwitchState={setEnableUpdate} selectedDate={date}/>
+              {isLoadingJobs || !jobs ? (
+                <></>
+              ) : (
+                <JobSelect
+                  jobs={jobs}
+                  departmentId={departmentId}
+                  jobTitleId={jobTitleId}
+                  setDepartmentId={setDepartmentId}
+                  setJobTitleId={setJobTitleId}
+                />
+              )}
             </div>
-            <AttendanceTable attendances={data.data} />
+            <AttendanceTable
+              attendances={data.data}
+              enableRowSelection={multiSelect}
+              refetchAtt={refetchAttendance}
+              selectedDate={date}
+              enableUpdate={enableUpdate}
+            />
           </div>
         )}
         <div className="container items-center mb-4 flex justify-center">

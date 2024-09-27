@@ -21,7 +21,7 @@ import {
 import useCreateEmployee from '@/hooks/api/employee/useCreateEmployee';
 import useGetJobs from '@/hooks/api/jobs/useGetJobs';
 import { useAuthStore } from '@/store/useAuthStore';
-import { Employee, EmployeeType } from '@/types/employee.type';
+import { Department, Employee, EmployeeType } from '@/types/employee.type';
 import { PaginationMeta } from '@/types/pagination.type';
 import { Role } from '@/types/user.type';
 import { QueryObserverResult } from '@tanstack/react-query';
@@ -31,15 +31,16 @@ import { FC, useState } from 'react';
 
 interface AddEmployeeDialogProps {
   refetchEmployees: () => Promise<QueryObserverResult>;
+  jobs: Department[] | undefined
+  isLoadingJobs: boolean
 }
 
 const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
-  refetchEmployees,
+  refetchEmployees,isLoadingJobs,jobs,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const { role } = useAuthStore((state) => state.user);
   const employeeType = ['KARYAWAN_TETAP', 'KARYAWAN_LEPAS'];
-  const { data: jobs, isLoading } = useGetJobs();
   const newDate = new Date();
   const fromYear = newDate.getFullYear() - 50;
   const toYear = newDate.getFullYear();
@@ -100,7 +101,7 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
           <DialogDescription>Tambah data baru karyawan.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
-          {isLoading || !jobs ? (
+          {isLoadingJobs || !jobs ? (
             <div>Loading</div>
           ) : (
             <div>

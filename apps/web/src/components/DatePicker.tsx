@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/popover';
 import { Dispatch, FC, SetStateAction } from 'react';
 import { Label } from './ui/label';
+import { Matcher } from 'react-day-picker';
 
 interface DatePickerProps {
   date: Date | undefined;
@@ -25,6 +26,7 @@ interface DatePickerProps {
   fromYear?: number;
   toYear?: number;
   captionLayout: 'dropdown' | 'buttons' | 'dropdown-buttons' | undefined;
+  disabled?: Matcher | Matcher[] 
 }
 
 const DatePicker: FC<DatePickerProps> = ({
@@ -36,6 +38,7 @@ const DatePicker: FC<DatePickerProps> = ({
   captionLayout,
   fromYear,
   toYear,
+  disabled
 }) => {
   return (
     <div className="my-3 flex w-full flex-col space-y-1.5">
@@ -70,6 +73,7 @@ const DatePicker: FC<DatePickerProps> = ({
             captionLayout={captionLayout}
             fromYear={fromYear}
             toYear={toYear}
+            disabled={disabled}
           />
         </PopoverContent>
       </Popover>

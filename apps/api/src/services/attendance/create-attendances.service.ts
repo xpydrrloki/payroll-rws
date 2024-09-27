@@ -1,3 +1,4 @@
+import { normalizeDateToMidnight } from '@/helpers/normalizeDate';
 import prisma from '@/prisma';
 import { AttendanceStatus, Prisma } from '@prisma/client';
 
@@ -9,7 +10,7 @@ export const createAttendancesService = async () => {
 
       const entryRecord = employeeIds.map<Prisma.AttendanceCreateManyInput>((id)=>({
         employeeId: id.id,
-        date: new Date(),
+        date: new Date(normalizeDateToMidnight(new Date().toISOString())),
         status: AttendanceStatus.MANGKIR
       }))
       
