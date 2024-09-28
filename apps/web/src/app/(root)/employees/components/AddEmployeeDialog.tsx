@@ -21,7 +21,7 @@ import {
 import useCreateEmployee from '@/hooks/api/employee/useCreateEmployee';
 import useGetJobs from '@/hooks/api/jobs/useGetJobs';
 import { useAuthStore } from '@/store/useAuthStore';
-import { Employee, EmployeeType } from '@/types/employee.type';
+import { Department, Employee, EmployeeType } from '@/types/employee.type';
 import { PaginationMeta } from '@/types/pagination.type';
 import { Role } from '@/types/user.type';
 import { QueryObserverResult } from '@tanstack/react-query';
@@ -31,19 +31,26 @@ import { FC, useState } from 'react';
 
 interface AddEmployeeDialogProps {
   refetchEmployees: () => Promise<QueryObserverResult>;
+  jobs: Department[] | undefined
+  isLoadingJobs: boolean
 }
 
 const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
-  refetchEmployees,
+  refetchEmployees,isLoadingJobs,jobs,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const { role } = useAuthStore((state) => state.user);
   const employeeType = ['KARYAWAN_TETAP', 'KARYAWAN_LEPAS'];
-  const { data: jobs, isLoading } = useGetJobs();
-  console.log('ini jobs', jobs);
+  const newDate = new Date();
+  const fromYear = newDate.getFullYear() - 50;
+  const toYear = newDate.getFullYear();
 
   const [date, setDate] = useState<Date | undefined>();
-  const { mutateAsync, isPending } = useCreateEmployee();
+  const {
+    mutateAsync,
+    isPending,
+    isError: isErrorMutation,
+  } = useCreateEmployee();
   const {
     handleBlur,
     handleChange,
@@ -71,9 +78,11 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
       };
 
       await mutateAsync(payload);
-      await refetchEmployees();
-      resetForm();
-      setOpen(false);
+      if (!isErrorMutation) {
+        await refetchEmployees();
+        resetForm();
+        setOpen(false);
+      }
     },
   });
   // console.log(jobs[0]);
@@ -92,7 +101,7 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
           <DialogDescription>Tambah data baru karyawan.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
-          {isLoading || !jobs ? (
+          {isLoadingJobs || !jobs ? (
             <div>Loading</div>
           ) : (
             <div>
@@ -136,6 +145,9 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
                   name="hiringDate"
                   label="Mulai Kerja"
                   isError={!!touched.hiringDate && !!errors.hiringDate}
+                  captionLayout="dropdown"
+                  fromYear={fromYear}
+                  toYear={toYear}
                 />
                 <SelectInput
                   field={{
@@ -151,7 +163,7 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
                   isError={!!touched.employeeType && !!errors.employeeType}
                 />
               </div>
-             
+
               <div className="flex justify-between gap-x-6 w-full">
                 <div className="my-3 flex w-full flex-col space-y-1.5 h-fit z-30">
                   <Label

@@ -8,6 +8,9 @@ import { useEffect } from 'react';
 const useAxios = () => {
   const logoutAction = useAuthStore((state) => state.logoutAction);
 
+  const value = typeof window !== 'undefined' ? localStorage : null;
+
+
   useEffect(() => {
     const token = window.localStorage.getItem('token');
     const requestIntercept = axiosInstance.interceptors.request.use(
@@ -37,7 +40,7 @@ const useAxios = () => {
       axiosInstance.interceptors.request.eject(requestIntercept);
       axiosInstance.interceptors.request.eject(responseIntercept);
     };
-  }, [window.localStorage, logoutAction]);
+  }, [value, logoutAction]);
 
   return { axiosInstance };
 };

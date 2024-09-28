@@ -19,7 +19,7 @@ export class EmployeeRouter {
     this.router.get(
       '/',
       verifyToken,
-      this.employeeController.getEmployeeController,
+      this.employeeController.getEmployeesController,
     );
     this.router.post(
       '/',
@@ -27,6 +27,11 @@ export class EmployeeRouter {
       verifyUser,
       verifyRole,
       this.employeeController.createEmployeeController,
+    );
+    this.router.get(
+      '/:id',
+      verifyToken,
+      this.employeeController.getEmployeeController,
     );
   }
 
