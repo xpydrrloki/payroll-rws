@@ -1,6 +1,7 @@
 import { createAttendancesService } from '@/services/attendance/create-attendances.service';
 import { getAttendancesService } from '@/services/attendance/get-attendances.service';
 import { updateAttendanceService } from '@/services/attendance/update-attendance.service';
+import { updateManyAttendanceService } from '@/services/attendance/update-many-attendance.service';
 import { NextFunction, Request, Response } from 'express';
 
 export class AttendanceController {
@@ -49,6 +50,19 @@ export class AttendanceController {
   ) {
     try {
       const result = await createAttendancesService();
+
+      res.status(200).send(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateManyAttendanceController(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const result = await updateManyAttendanceService(req.body);
 
       res.status(200).send(result);
     } catch (error) {

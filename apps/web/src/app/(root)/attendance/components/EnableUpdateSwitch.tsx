@@ -209,10 +209,7 @@ const EnableUpdateSwitch: FC<EnableUpdateSwitchProps> = ({
 
   // Ensure selectedDate is properly compared
   const now = new Date(normalizeDateToMidnight(new Date().toISOString()));
-  if(parsedDate == now){
-    console.log("aw");
-    
-  }
+  
   
 
   return (

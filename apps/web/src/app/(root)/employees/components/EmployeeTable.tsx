@@ -10,7 +10,7 @@ interface EmployeeTableProp {
 
 const EmployeeTable: FC<EmployeeTableProp> = ({employees}) => {
 
-  return <div><DataTable columns={columns} data={employees}/></div>;
+  return <div><DataTable columns={columns} data={employees} getRowId={(row)=>String(row.id)}/></div>;
 };
 
 export default EmployeeTable;

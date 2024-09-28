@@ -5,6 +5,8 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  Row,
+  RowSelectionState,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -17,22 +19,28 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from './button';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   enableRowSelection?: boolean;
+  rowSelection?: RowSelectionState;
+  setRowSelection?: Dispatch<SetStateAction<RowSelectionState>>;
+  getRowId: (row: TData) => string ;
+  
+  
 }
 
 export const DataTable = <TData, TValue>({
   columns,
   data,
   enableRowSelection = false,
-}: DataTableProps<TData, TValue>) => {
-  const [rowSelection, setRowSelection] = useState({});
+  rowSelection,
+  setRowSelection,
+  getRowId
   
-
+}: DataTableProps<TData, TValue>) => {
   const table = useReactTable({
     data,
     columns,
@@ -42,6 +50,7 @@ export const DataTable = <TData, TValue>({
     state: {
       rowSelection: enableRowSelection ? rowSelection : undefined,
     },
+    getRowId
   });
 
   return (
@@ -70,10 +79,10 @@ export const DataTable = <TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                key={row.id}
-                data-state={
-                  enableRowSelection && row.getIsSelected() && 'selected'
-                }  
+                  key={row.id}
+                  data-state={
+                    enableRowSelection && row.getIsSelected() && 'selected'
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

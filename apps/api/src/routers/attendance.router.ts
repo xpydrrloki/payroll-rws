@@ -16,6 +16,7 @@ export class AttendanceRouter {
     this.router.get('/', verifyToken, this.attendanceController.getAttendancesController);
     this.router.post('/create-attendance', verifyToken, this.attendanceController.createAttendancesController);
     this.router.patch('/', verifyToken, this.attendanceController.updateAttendanceController);
+    this.router.patch('/multi', verifyToken, this.attendanceController.updateManyAttendanceController);
   }
 
   getRouter(): Router {

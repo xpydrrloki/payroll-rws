@@ -34,7 +34,7 @@ const JobSelect: FC<JobSelectProps> = ({
     }
   };
   return (
-    <div className="flex items-center gap-x-8">
+    <div className="flex items-center gap-x-4">
       <div className="w-48">
         <Label htmlFor={'departmentId'}>{'Departemen'}</Label>
         <Select

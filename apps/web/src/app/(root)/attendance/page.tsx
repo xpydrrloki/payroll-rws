@@ -11,6 +11,8 @@ import JobSelect from '@/components/JobSelect';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import EnableUpdateSwitch from './components/EnableUpdateSwitch';
+import AttendanceStatusSelect from './components/AttendanceStatusSelect';
+import { RowSelectionState } from '@tanstack/react-table';
 
 const Attendance = () => {
   const searchParams = useSearchParams();
@@ -25,9 +27,10 @@ const Attendance = () => {
   const [page, setPage] = useState<number>(initialPage);
   const [departmentId, setDepartmentId] = useState<number>(0);
   const [jobTitleId, setJobTitleId] = useState<number>(0);
-  const [enableUpdate, setEnableUpdate] =useState<boolean>(false)
+  const [enableUpdate, setEnableUpdate] = useState<boolean>(false);
   const [date, setDate] = useState<Date | undefined>(initialDate);
-  const [multiSelect, setMultiSelect] = useState<boolean>(false);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+
   const { data: jobs, isLoading: isLoadingJobs } = useGetJobs();
   const {
     data,
@@ -42,7 +45,6 @@ const Attendance = () => {
     departmentId,
     jobTitleId,
   });
-  console.log(data?.data.length);
 
   const handleChangePaginate = ({ selected }: { selected: number }) => {
     const newPage = selected + 1;
@@ -75,6 +77,9 @@ const Attendance = () => {
       setPage(currentPage);
     }
   }, [searchParams]);
+  useEffect(() => {
+    setRowSelection({});
+  }, [date]);
   return (
     <main className="container px-8 py-12">
       <h2 className="mx-auto mb-4 max-w-6xl text-2xl font-bold">
@@ -95,7 +100,11 @@ const Attendance = () => {
                 name=""
                 disabled={{ after: new Date() }}
               />
-              <EnableUpdateSwitch switchState={enableUpdate} setSwitchState={setEnableUpdate} selectedDate={date}/>
+              <EnableUpdateSwitch
+                switchState={enableUpdate}
+                setSwitchState={setEnableUpdate}
+                selectedDate={date}
+              />
               {isLoadingJobs || !jobs ? (
                 <></>
               ) : (
@@ -108,11 +117,26 @@ const Attendance = () => {
                 />
               )}
             </div>
+            <div className="flex mx-2 justify-between  items-center gap-x-4 my-2 h-9 transition-all duration-75">
+              <div>Search...</div>
+              {Object.keys(rowSelection).length ? (
+                <AttendanceStatusSelect
+                  rowSelection={rowSelection}
+                  enableUpdate={enableUpdate}
+                  refetchAtt={refetchAttendance}
+                  setRowSelection={setRowSelection}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
             <AttendanceTable
               attendances={data.data}
-              enableRowSelection={multiSelect}
+              enableRowSelection={true}
               refetchAtt={refetchAttendance}
               selectedDate={date}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
               enableUpdate={enableUpdate}
             />
           </div>

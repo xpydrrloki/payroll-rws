@@ -1,7 +1,7 @@
 import { DataTable } from '@/components/ui/data-table';
 import useGetEmployees from '@/hooks/api/employee/useGetEmployees';
 import { Employee } from '@/types/employee.type';
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { createColumns } from './columns';
 import { Attendance } from '@/types/attendance.type';
 import useUpdateAttendanceStatus from '@/hooks/api/attendance/useUpdateAttendanceStatus';
@@ -12,6 +12,8 @@ interface AttendanceTableProps {
   refetchAtt: () => void;
   selectedDate: Date | undefined;
   enableUpdate?: boolean;
+  rowSelection: {};
+  setRowSelection: Dispatch<SetStateAction<{}>>;
 }
 
 const AttendanceTable: FC<AttendanceTableProps> = ({
@@ -20,6 +22,8 @@ const AttendanceTable: FC<AttendanceTableProps> = ({
   refetchAtt,
   selectedDate,
   enableUpdate = false,
+  rowSelection,
+  setRowSelection,
 }) => {
   const { mutateAsync } = useUpdateAttendanceStatus();
   const columns = createColumns(
@@ -28,6 +32,8 @@ const AttendanceTable: FC<AttendanceTableProps> = ({
     refetchAtt,
     selectedDate,
     enableUpdate,
+
+    
   );
   return (
     <div>
@@ -35,6 +41,9 @@ const AttendanceTable: FC<AttendanceTableProps> = ({
         columns={columns}
         data={attendances}
         enableRowSelection={enableRowSelection}
+        setRowSelection={setRowSelection}
+        rowSelection={rowSelection}
+        getRowId={(row)=>String(row.id)}
       />
     </div>
   );
