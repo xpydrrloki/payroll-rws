@@ -129,7 +129,7 @@ export const columns: ColumnDef<Employee>[] = [
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <Copy className="mr-2 h-4 w-4" />
-                <span>Salin data...</span>
+                <span>Salin data ...</span>
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>

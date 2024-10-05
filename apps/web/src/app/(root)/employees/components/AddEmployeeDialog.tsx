@@ -69,6 +69,7 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
       departmentId: 0,
       hiringDate: new Date(),
       employeeType: '',
+      salary: 0
     },
     onSubmit: async (values) => {
       const payload = {
@@ -85,7 +86,6 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
       }
     },
   });
-  // console.log(jobs[0]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -137,6 +137,18 @@ const AddEmployeeDialog: FC<AddEmployeeDialogProps> = ({
                 placeholder="081234567890"
                 type="text"
                 value={values.phoneNumber}
+              />
+              <FormInput
+                name="salary"
+                label="Gaji Pokok"
+                error={errors.salary}
+                isError={!!touched.salary && !!errors.salary}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                placeholder="Rp00,00"
+                type="number"
+                value={String(values.salary)}
+                isCurrency={true}
               />
               <div className="flex w-full justify-between gap-x-4">
                 <DatePicker

@@ -13,6 +13,8 @@ import { EmployeeRouter } from './routers/employee.router';
 import { JobRouter } from './routers/job.router';
 import { AttendanceRouter } from './routers/attendance.router';
 import { scheduleAttendanceTask } from './libs/scheduleAttendance';
+import { AllowanceRouter } from './routers/allowance.router';
+import { DeductionRouter } from './routers/deduction.router';
 
 export default class App {
   private app: Express;
@@ -59,6 +61,8 @@ export default class App {
     const employeeRouter = new EmployeeRouter();
     const jobRouter = new JobRouter();
     const attendanceRouter = new AttendanceRouter()
+    const allowanceRouter = new AllowanceRouter()
+    const deductionRouter = new DeductionRouter()
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Welcome to Personalia Application`);
@@ -68,6 +72,8 @@ export default class App {
     this.app.use('/api/employee', employeeRouter.getRouter());
     this.app.use('/api/job', jobRouter.getRouter());
     this.app.use('/api/attendance', attendanceRouter.getRouter());
+    this.app.use('/api/allowance', allowanceRouter.getRouter());
+    this.app.use('/api/deduction', deductionRouter.getRouter());
   }
   private schedules(): void{
   //  scheduleAttendanceTask()

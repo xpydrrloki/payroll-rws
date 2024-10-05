@@ -7,9 +7,9 @@ import { useEffect } from 'react';
 
 const useAxios = () => {
   const logoutAction = useAuthStore((state) => state.logoutAction);
+  const router = useRouter();
 
   const value = typeof window !== 'undefined' ? localStorage : null;
-
 
   useEffect(() => {
     const token = window.localStorage.getItem('token');
@@ -26,11 +26,17 @@ const useAxios = () => {
     );
     const responseIntercept = axiosInstance.interceptors.response.use(
       (response) => response,
-      (err: AxiosError) => {
+      async (err: AxiosError) => {
         if (err?.response?.status === 401) {
+          await new Promise<void>((res) => {
+            setTimeout(res, 2000);
+          });
           logoutAction();
           localStorage.removeItem('Authorization');
           localStorage.removeItem('token');
+
+          router.push('/login');
+
         }
         return Promise.reject(err);
       },

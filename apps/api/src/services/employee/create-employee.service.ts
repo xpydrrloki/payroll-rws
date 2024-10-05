@@ -13,6 +13,7 @@ export const createEmployeeService = async (body: CreateEmployeeArgs) => {
       jobTitleId,
       name,
       phoneNumber,
+      salary
     } = body;
 
     const newEmployee = await prisma.employee.create({
@@ -24,6 +25,7 @@ export const createEmployeeService = async (body: CreateEmployeeArgs) => {
         jobTitleId : Number(jobTitleId),
         departmentId : Number(departmentId),
         phoneNumber,
+        salary
       },
     });
     return {

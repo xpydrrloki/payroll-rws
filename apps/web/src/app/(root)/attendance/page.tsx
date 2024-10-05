@@ -125,6 +125,7 @@ const Attendance = () => {
                   enableUpdate={enableUpdate}
                   refetchAtt={refetchAttendance}
                   setRowSelection={setRowSelection}
+                  selectedDate={date}
                 />
               ) : (
                 <></>

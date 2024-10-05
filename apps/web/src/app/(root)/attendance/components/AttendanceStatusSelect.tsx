@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { normalizeDateToMidnight } from '@/helper/normalizeDate';
 import useUpdateManyAttendanceStatus from '@/hooks/api/attendance/useUpdateManyAttendanceStatus';
 import { AttendanceStatus } from '@/types/attendance.type';
 import { RowSelectionState } from '@tanstack/react-table';
@@ -17,6 +18,7 @@ interface AttendanceStatusSelectProps {
   setRowSelection: Dispatch<SetStateAction<RowSelectionState>>;
   enableUpdate: boolean;
   refetchAtt: () => void;
+  selectedDate: Date | undefined;
 }
 interface UpdateManyAttendanceArgs {
   ids: string[]; // Set `ids` as string array
@@ -28,6 +30,7 @@ const AttendanceStatusSelect: FC<AttendanceStatusSelectProps> = ({
   enableUpdate,
   refetchAtt,
   setRowSelection,
+  selectedDate,
 }) => {
   const { mutateAsync, isPending } = useUpdateManyAttendanceStatus();
 
@@ -57,6 +60,17 @@ const AttendanceStatusSelect: FC<AttendanceStatusSelectProps> = ({
     setFieldValue('ids', Object.keys(rowSelection));
   }, [rowSelection]);
 
+  const parsedDate = selectedDate
+    ? new Date(normalizeDateToMidnight(selectedDate.toDateString()))
+    : undefined;
+
+  // Ensure selectedDate is properly compared
+  const now = new Date(normalizeDateToMidnight(new Date().toISOString()));
+
+  const isPastDate = parsedDate && parsedDate < now;
+
+  
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -78,7 +92,7 @@ const AttendanceStatusSelect: FC<AttendanceStatusSelectProps> = ({
       </div>
       <Button
         type="submit"
-        disabled={!enableUpdate || isPending || !values.status} // Disable button while loading
+        disabled={(!enableUpdate && isPastDate) || isPending || !values.status} // Disable button while loading
       >
         {isPending ? 'Menyimpan data...' : 'Simpan'}
       </Button>
