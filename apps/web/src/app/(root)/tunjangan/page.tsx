@@ -1,16 +1,16 @@
 'use client';
 import useGetAllowances from '@/hooks/api/allowance/useGetAllowances';
 import React, { useEffect, useState } from 'react';
-import AllowanceTable from './components/AllowanceTable';
+import AllowanceTable from './components/allowance/AllowanceTable';
 import { RowSelectionState } from '@tanstack/react-table';
 import Pagination from '@/components/Pagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useGetDeductions from '@/hooks/api/deduction/useGetDeductions';
-import DeductionTable from './components/DeductionTable';
-import CreateAllowanceDialog from './components/CreateAllowanceDialog';
-import CreateDeductionDialog from './components/CreateDeductionDialog';
-import EditAllowanceDialog from './components/EditAllowanceDialog';
-import EditDeductionDialog from './components/EditDeductionDialog';
+import DeductionTable from './components/deduction/DeductionTable';
+import CreateAllowanceDialog from './components/allowance/CreateAllowanceDialog';
+import CreateDeductionDialog from './components/deduction/CreateDeductionDialog';
+import EditAllowanceDialog from './components/allowance/EditAllowanceDialog';
+import EditDeductionDialog from './components/deduction/EditDeductionDialog';
 
 const Tunjangan = () => {
   const searchParams = useSearchParams();
@@ -37,7 +37,6 @@ const Tunjangan = () => {
   
   const [openEditAllowance, setOpenEditAllowance] = useState<boolean>(false);
   const [openEditDeduction, setOpenEditDeduction] = useState<boolean>(false);
-  console.log("ini allowanceId",allowanceId,"ini openEditAllowance", openEditAllowance);
 
   const {
     data: allowances,

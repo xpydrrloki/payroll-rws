@@ -19,6 +19,7 @@ import { Contact, Copy, MapPin, MoreHorizontal, User } from 'lucide-react';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -109,7 +110,7 @@ export const columns: ColumnDef<Employee>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const employee = row.original;
-      const router = useRouter();
+      // const router = useRouter();
 
       return (
         <DropdownMenu>
@@ -134,20 +135,23 @@ export const columns: ColumnDef<Employee>[] = [
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
                   <DropdownMenuItem
-                    onClick={() => {navigator.clipboard.writeText(employee.name)
-                      toast("Nama tersalin")
+                    onClick={() => {
+                      navigator.clipboard.writeText(employee.name);
+                      toast('Nama tersalin');
                     }}
                   >
                     <User className="mr-2 h-4 w-4" />
                     <span>Nama karyawan</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                   onClick={() => {
-                    if (employee.address) {
-                      navigator.clipboard.writeText(employee.address);
-                      toast("Alamat tersalin")
-                    } else {toast.warning("Alamat tidak tersedia")}
-                  }}
+                    onClick={() => {
+                      if (employee.address) {
+                        navigator.clipboard.writeText(employee.address);
+                        toast('Alamat tersalin');
+                      } else {
+                        toast.warning('Alamat tidak tersedia');
+                      }
+                    }}
                   >
                     <MapPin className="mr-2 h-4 w-4" />
                     <span>Alamat karyawan</span>
@@ -156,8 +160,10 @@ export const columns: ColumnDef<Employee>[] = [
                     onClick={() => {
                       if (employee.phoneNumber) {
                         navigator.clipboard.writeText(employee.phoneNumber);
-                        toast("Nomor telepon tersalin")
-                      } else {toast.warning("Nomor telepon tidak tersedia")}
+                        toast('Nomor telepon tersalin');
+                      } else {
+                        toast.warning('Nomor telepon tidak tersedia');
+                      }
                     }}
                   >
                     <Contact className="mr-2 h-4 w-4" />
@@ -167,11 +173,13 @@ export const columns: ColumnDef<Employee>[] = [
               </DropdownMenuPortal>
             </DropdownMenuSub>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => router.push(`/employees/${employee.id}`)}
-            >
-              Lihat detail karyawan
-            </DropdownMenuItem>
+            <Link href={`/employees/${employee.id}`}>
+              <DropdownMenuItem
+              // onClick={() => router.push(`/employees/${employee.id}`)}
+              >
+                Lihat detail karyawan
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuContent>
         </DropdownMenu>
       );

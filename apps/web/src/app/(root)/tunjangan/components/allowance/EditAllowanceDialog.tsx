@@ -1,33 +1,30 @@
 'use client';
-import useGetDeduction from '@/hooks/api/deduction/useGetDeduction';
-import useUpdateDeduction from '@/hooks/api/deduction/useUpdateDeduction';
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import useGetAllowance from '@/hooks/api/allowance/useGetAllowance';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-  } from '@/components/ui/dialog';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Pencil } from 'lucide-react';
 import { Formik } from 'formik';
+import useEditAllowance from '@/hooks/api/allowance/useEditAllowance';
+import CreateAlloDeducForm from '../CreateAlloDeducForm';
 import { getChangedValues } from '@/utils/getChangedValues';
-import CreateAlloDeducForm from './CreateAlloDeducForm';
 
-interface EditDeductionDialogProps {
-  refetchDeductions: () => void;
+interface EditAllowanceDialogProps {
+  refetchAllowances: () => void;
   id: number | undefined;
   openState: boolean;
   setOpenState: Dispatch<SetStateAction<boolean>>;
 }
-const EditDeductionDialog: FC<EditDeductionDialogProps> = ({
-  id,
-  openState,
-  refetchDeductions,
-  setOpenState,
-}) => {
-  const { data, isLoading, refetch } = useGetDeduction(id);
-  const { mutateAsync, isPending, isError } = useUpdateDeduction(id);
+
+const EditAllowanceDialog: FC<EditAllowanceDialogProps> = ({ id,refetchAllowances,openState,setOpenState }) => {
+  const { data, isLoading , refetch} = useGetAllowance(id);
+  const { mutateAsync, isPending, isError } = useEditAllowance(id);
 
   const initialValues = {
     name: data?.name || '',
@@ -40,7 +37,10 @@ const EditDeductionDialog: FC<EditDeductionDialogProps> = ({
         <></>
       ) : (
         <Dialog open={openState} onOpenChange={setOpenState}>
-          <DialogTrigger></DialogTrigger>
+          <DialogTrigger
+          >
+           
+          </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Tambah Data Tunjangan</DialogTitle>
@@ -51,16 +51,17 @@ const EditDeductionDialog: FC<EditDeductionDialogProps> = ({
               onSubmit={async (values) => {
                 const payload = getChangedValues(values, initialValues);
 
+
                 await mutateAsync(payload);
                 if (!isError) {
                   setOpenState(false);
                   refetch();
-                  refetchDeductions();
+                  refetchAllowances()
                 }
               }}
               enableReinitialize={true}
             >
-              <CreateAlloDeducForm formType="potongan" isPending={isPending} />
+              <CreateAlloDeducForm formType="tunjangan" isPending={isPending} />
             </Formik>
           </DialogContent>
         </Dialog>
@@ -69,4 +70,4 @@ const EditDeductionDialog: FC<EditDeductionDialogProps> = ({
   );
 };
 
-export default EditDeductionDialog;
+export default EditAllowanceDialog;

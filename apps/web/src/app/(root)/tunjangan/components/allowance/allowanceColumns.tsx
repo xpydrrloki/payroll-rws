@@ -72,7 +72,6 @@ export const createAllowanceColumns = (args: {
       id: 'actions',
       cell: ({ row }) => {
         const tunjangan = row.original;
-        const router = useRouter();
 
         return (
           <DropdownMenu>

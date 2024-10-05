@@ -11,14 +11,15 @@ import {
 import { Plus } from 'lucide-react';
 import { Formik } from 'formik';
 import useCreateAllowance from '@/hooks/api/allowance/useCreateAllowance';
-import CreateAlloDeducForm from './CreateAlloDeducForm';
+import CreateAlloDeducForm from '../CreateAlloDeducForm';
+import useCreateDeductions from '@/hooks/api/deduction/useCreateDeductions';
 
-interface CreateAllowanceDialogProps {
-  refetchAllowance: () => void;
+interface CreateDeductionDialogProps {
+  refetch: () => void;
 }
 
-const CreateAllowanceDialog: FC<CreateAllowanceDialogProps> = ({
-  refetchAllowance,
+const CreateDeductionDialog: FC<CreateDeductionDialogProps> = ({
+    refetch,
 }) => {
     const [open, setOpen] = useState<boolean>(false)
   const initialValues = {
@@ -27,7 +28,7 @@ const CreateAllowanceDialog: FC<CreateAllowanceDialogProps> = ({
     description: '',
   };
 //   const refetchAllowance  = ()=>{};
-  const { mutateAsync, isPending, isError } = useCreateAllowance();
+  const { mutateAsync, isPending, isError } = useCreateDeductions();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
@@ -38,8 +39,8 @@ const CreateAllowanceDialog: FC<CreateAllowanceDialogProps> = ({
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Tambah Data Tunjangan</DialogTitle>
-          <DialogDescription>Tambah data baru tunjangan.</DialogDescription>
+          <DialogTitle>Tambah Data Potongan</DialogTitle>
+          <DialogDescription>Tambah data baru potongan.</DialogDescription>
         </DialogHeader>
         <Formik
           initialValues={initialValues}
@@ -49,13 +50,13 @@ const CreateAllowanceDialog: FC<CreateAllowanceDialogProps> = ({
             await mutateAsync(values);
             if (!isError) {
               setOpen(false);
-              refetchAllowance()
+              refetch()
             }
           }}
           enableReinitialize={true}
         >
           <CreateAlloDeducForm
-            formType="tunjangan"
+            formType="potongan"
             isPending={isPending}
           />
         </Formik>
@@ -64,4 +65,4 @@ const CreateAllowanceDialog: FC<CreateAllowanceDialogProps> = ({
   );
 };
 
-export default CreateAllowanceDialog;
+export default CreateDeductionDialog;
