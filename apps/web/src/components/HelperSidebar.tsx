@@ -1,4 +1,4 @@
-import { CalendarClock, HandCoins, Home, UsersRound } from 'lucide-react';
+import { CalendarClock, HandCoins, Home, NotebookText, UsersRound } from 'lucide-react';
 
 export const listSuper = [
   { name: 'Home', url: '/', icon: <Home size={20} /> },
@@ -8,8 +8,12 @@ export const listSuper = [
     url: '/attendance',
     icon: <CalendarClock size={20} />,
   },
+  {
+    name: 'Tunjangan Potongan',
+    url: '/tunjangan',
+    icon: <NotebookText size={20} />,
+  },
   { name: 'Girik', url: '/payroll', icon: <HandCoins size={20} /> },
 ];
 
-export const baseClass = "bg-main-grey text-white border-none flex gap-4 h-16";
-
+export const baseClass = 'bg-main-grey text-white border-none flex gap-4 h-16';

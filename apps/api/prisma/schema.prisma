@@ -71,14 +71,17 @@ model Employee {
   hiringDate   DateTime
   updatedAt    DateTime     @updatedAt
   deletedAt    DateTime?
-  departmentId Int          
-  jobTitleId   Int          
+  departmentId Int
+  jobTitleId   Int
+  salary       Int
 
-  department Department   @relation(fields: [departmentId], references: [id])
-  jobTitle   JobTitle     @relation(fields: [jobTitleId], references: [id])
-  Overtime   Overtime[]
-  Attendance Attendance[]
-  Payroll    Payroll[]
+  department        Department          @relation(fields: [departmentId], references: [id])
+  jobTitle          JobTitle            @relation(fields: [jobTitleId], references: [id])
+  Overtime          Overtime[]
+  Attendance        Attendance[]
+  Payroll           Payroll[]
+  EmployeeTunjangan EmployeeTunjangan[]
+  EmployeePotongan  EmployeePotongan[]
 
   @@map("employees")
 }
@@ -119,57 +122,69 @@ model Attendance {
 }
 
 model Payroll {
-  id         Int      @id @default(autoincrement())
-  baseSalary Int
-  payDate    DateTime
-  netPay     Int
-  employeeId Int
+  id             Int      @id @default(autoincrement())
+  baseSalary     Int
+  payPeriodStart DateTime
+  payPeriodEnd   DateTime
+  grossPay       Int
+  netPay         Int
+  employeeId     Int
+  totalTunjangan Int
+  totalPotongan  Int
 
-  employee         Employee           @relation(fields: [employeeId], references: [id])
-  TunjanganPayroll TunjanganPayroll[]
-  PotonganPayroll  PotonganPayroll[]
+  employee Employee @relation(fields: [employeeId], references: [id])
 
   @@map("payrolls")
 }
 
 model Tunjangan {
-  id               Int                @id @default(autoincrement())
-  name             String
-  description      String             @db.LongText
-  TunjanganPayroll TunjanganPayroll[]
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String    @db.LongText
+  amount      Int
+  deletedAt   DateTime?
+
+  EmployeeTunjangan EmployeeTunjangan[]
 
   @@map("tunjangan")
 }
 
-model TunjanganPayroll {
+model EmployeeTunjangan {
   id          Int @id @default(autoincrement())
-  payrollId   Int
+  employeeId  Int
   tunjanganId Int
-  amount      Int
 
-  payroll   Payroll   @relation(fields: [payrollId], references: [id])
+  employee  Employee  @relation(fields: [employeeId], references: [id])
   tunjangan Tunjangan @relation(fields: [tunjanganId], references: [id])
 
-  @@map("tunjangan_payroll")
+  @@map("employee_tunjanga")
 }
 
 model Potongan {
-  id              Int               @id @default(autoincrement())
-  name            String
-  description     String            @db.LongText
-  PotonganPayroll PotonganPayroll[]
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String    @db.LongText
+  amount      Int
+  deletedAt   DateTime?
+
+  EmployeePotongan EmployeePotongan[]
 
   @@map("potongan")
 }
 
-model PotonganPayroll {
+model EmployeePotongan {
   id         Int @id @default(autoincrement())
-  payrollId  Int
+  employeeId Int
   potonganId Int
-  amount     Int
 
-  payroll  Payroll  @relation(fields: [payrollId], references: [id])
+  employee Employee @relation(fields: [employeeId], references: [id])
   potongan Potongan @relation(fields: [potonganId], references: [id])
 
-  @@map("potongan_payroll")
+  @@map("employee_potongan")
+}
+
+model Holiday {
+  id          Int      @id @default(autoincrement())
+  date        DateTime // Date of the holiday
+  holidayName String // Name of the holiday
 }

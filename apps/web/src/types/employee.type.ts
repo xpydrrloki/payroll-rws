@@ -1,5 +1,5 @@
 import { Attendance, Overtime } from './attendance.type';
-import { Payroll } from './payroll.type';
+import { EmployeePotongan, EmployeeTunjangan, Payroll } from './payroll.type';
 
 export interface Department {
   id: number;
@@ -30,6 +30,7 @@ export interface Employee {
   phoneNumber?: string;
   hiringDate: Date;
   updatedAt: Date;
+  salary: number;
   deletedAt?: Date;
   departmentId: number;
   jobTitleId: number;
@@ -38,4 +39,7 @@ export interface Employee {
   Overtime: Overtime[];
   Attendance: Attendance[];
   Payroll: Payroll[];
+
+  EmployeeTunjangan: EmployeeTunjangan[];
+  EmployeePotongan: EmployeePotongan[];
 }
