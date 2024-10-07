@@ -13,14 +13,15 @@ import {
 import { ColumnDef } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Pencil } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 
 export const createAllowanceColumns = (args: {
   enableRowSelection: boolean;
 
   handleEditAllowanceDialog: (allowanceId: number) => void;
+  handleDeleteAllowanceDialog: (allowanceId: number)=>void
 }): ColumnDef<Tunjangan>[] => {
-  const { enableRowSelection, handleEditAllowanceDialog } = args;
+  const { enableRowSelection, handleEditAllowanceDialog,handleDeleteAllowanceDialog } = args;
   const allowanceColumns: ColumnDef<Tunjangan>[] = [
     {
       accessorKey: 'name',
@@ -88,6 +89,12 @@ export const createAllowanceColumns = (args: {
               >
                 <Pencil className="size-4 mx-1" />
                 Ubah data
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleDeleteAllowanceDialog(tunjangan.id)}
+              >
+                <Trash className="size-4 mx-1" />
+                Hapus Data
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

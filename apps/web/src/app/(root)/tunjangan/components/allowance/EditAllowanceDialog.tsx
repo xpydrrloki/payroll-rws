@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Pencil } from 'lucide-react';
 import { Formik } from 'formik';
 import useEditAllowance from '@/hooks/api/allowance/useEditAllowance';
 import CreateAlloDeducForm from '../CreateAlloDeducForm';

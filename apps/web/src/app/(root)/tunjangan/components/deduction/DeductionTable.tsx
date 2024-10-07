@@ -14,6 +14,8 @@ interface DeductionTableProp {
   deductionId: number | undefined;
   openState: boolean;
   setOpenState: Dispatch<SetStateAction<boolean>>;
+  openDeleteDeduction: boolean;
+  setOpenDeleteDeduction: Dispatch<SetStateAction<boolean>>;
 }
 
 const DeductionTable: FC<DeductionTableProp> = ({
@@ -25,13 +27,17 @@ const DeductionTable: FC<DeductionTableProp> = ({
   deductionId,
   openState,
   setDeductionId,
-  setOpenState,
+  setOpenState,openDeleteDeduction,setOpenDeleteDeduction
 }) => {
   const dedcutionsColumns = createDeductionsColumns({
     enableRowSelection,
     handleEditDeductionDialog(allowanceId) {
       setDeductionId(allowanceId);
       setOpenState(true);
+    },
+    handleDeleteDeductionDialog(allowanceId) {
+      setDeductionId(allowanceId);
+      setOpenDeleteDeduction(true);
     },
   });
   return (

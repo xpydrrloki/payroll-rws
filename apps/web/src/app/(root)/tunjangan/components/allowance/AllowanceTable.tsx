@@ -15,6 +15,8 @@ interface AllowanceTableProp {
   allowanceId: number | undefined;
   openState: boolean;
   setOpenState: Dispatch<SetStateAction<boolean>>;
+  openDeleteDialog: boolean;
+  setOpenDeleteDialog: Dispatch<SetStateAction<boolean>>;
 }
 
 const AllowanceTable: FC<AllowanceTableProp> = ({
@@ -27,12 +29,18 @@ const AllowanceTable: FC<AllowanceTableProp> = ({
   setAllowanceId,
   openState,
   setOpenState,
+  openDeleteDialog,
+  setOpenDeleteDialog
 }) => {
   const allowanceColumns = createAllowanceColumns({
     enableRowSelection,
     handleEditAllowanceDialog(allowanceId) {
       setAllowanceId(allowanceId);
       setOpenState(true);
+    },
+    handleDeleteAllowanceDialog(allowanceId) {
+      setAllowanceId(allowanceId)
+      setOpenDeleteDialog(true)
     },
   });
   return (

@@ -12,14 +12,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Pencil } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 
 export const createDeductionsColumns = (args: {
   enableRowSelection: boolean;
-
   handleEditDeductionDialog: (allowanceId: number) => void;
+  handleDeleteDeductionDialog: (allowanceId: number) => void;
 }): ColumnDef<Potongan>[] => {
-  const { enableRowSelection, handleEditDeductionDialog } = args;
+  const { enableRowSelection, handleEditDeductionDialog ,handleDeleteDeductionDialog} = args;
   const deductionColumns: ColumnDef<Potongan>[] = [
     {
       accessorKey: 'name',
@@ -87,6 +87,12 @@ export const createDeductionsColumns = (args: {
               >
                 <Pencil className="size-4 mx-1" />
                 Ubah data
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleDeleteDeductionDialog(potongan.id)}
+              >
+                <Trash className="size-4 mx-1" />
+                Hapus Data
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

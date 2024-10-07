@@ -11,6 +11,8 @@ import CreateAllowanceDialog from './components/allowance/CreateAllowanceDialog'
 import CreateDeductionDialog from './components/deduction/CreateDeductionDialog';
 import EditAllowanceDialog from './components/allowance/EditAllowanceDialog';
 import EditDeductionDialog from './components/deduction/EditDeductionDialog';
+import DeleteAllowanceDialog from './components/allowance/DeleteAllowanceDialog';
+import DeleteDeductionDialog from './components/deduction/DeleteDeductionDialog';
 
 const Tunjangan = () => {
   const searchParams = useSearchParams();
@@ -34,14 +36,18 @@ const Tunjangan = () => {
     useState<number>(initialDeductionPage);
   const [allowanceId, setAllowanceId] = useState<number | undefined>();
   const [deductionId, setDeductionId] = useState<number | undefined>();
-  
+
   const [openEditAllowance, setOpenEditAllowance] = useState<boolean>(false);
+  const [openDeleteAllowance, setOpenDeleteAllowance] =
+    useState<boolean>(false);
   const [openEditDeduction, setOpenEditDeduction] = useState<boolean>(false);
+  const [openDeleteDeduction, setOpenDeleteDeduction] =
+    useState<boolean>(false);
 
   const {
     data: allowances,
     isLoading: isLoadingAllowance,
-    refetch: refetchAllowance,
+    refetch: refetchAllowances,
   } = useGetAllowances({
     page: allowancePage,
     take: 5,
@@ -69,7 +75,7 @@ const Tunjangan = () => {
     // Update the URL without reloading the page
     const params = new URLSearchParams(searchParams.toString());
     params.set('allowance-page', String(newPage));
-    router.replace(`${pathname}?${params}`);
+    router.replace(`${pathname}?${params}`, { scroll: false });
   };
   const handleChangeDeductionPaginate = ({
     selected,
@@ -84,7 +90,7 @@ const Tunjangan = () => {
     // Update the URL without reloading the page
     const params = new URLSearchParams(searchParams.toString());
     params.set('deduction-page', String(newPage));
-    router.replace(`${pathname}?${params}`);
+    router.replace(`${pathname}?${params}`, { scroll: false });
   };
   useEffect(() => {
     const currentAllowancePage =
@@ -115,12 +121,18 @@ const Tunjangan = () => {
         ) : (
           <div className="px-4">
             <div className="flex justify-end mx-2 items-center">
-              <CreateAllowanceDialog refetchAllowance={refetchAllowance} />
+              <CreateAllowanceDialog refetchAllowance={refetchAllowances} />
               <EditAllowanceDialog
                 id={allowanceId}
                 openState={openEditAllowance}
                 setOpenState={setOpenEditAllowance}
-                refetchAllowances={refetchAllowance}
+                refetchAllowances={refetchAllowances}
+              />
+              <DeleteAllowanceDialog
+                id={allowanceId}
+                openState={openDeleteAllowance}
+                setOpenState={setOpenDeleteAllowance}
+                refetchAllowances={refetchAllowances}
               />
             </div>
             <AllowanceTable
@@ -132,6 +144,8 @@ const Tunjangan = () => {
               openState={openEditAllowance}
               setOpenState={setOpenEditAllowance}
               setAllowanceId={setAllowanceId}
+              openDeleteDialog={openDeleteAllowance}
+              setOpenDeleteDialog={setOpenDeleteAllowance}
             />
           </div>
         )}
@@ -153,7 +167,18 @@ const Tunjangan = () => {
           <div className="px-4">
             <div className="flex justify-end mx-2 items-center">
               <CreateDeductionDialog refetch={refetchDeductions} />
-              <EditDeductionDialog id={deductionId} openState={openEditDeduction} refetchDeductions={refetchDeductions} setOpenState={setOpenEditDeduction} />
+              <EditDeductionDialog
+                id={deductionId}
+                openState={openEditDeduction}
+                refetchDeductions={refetchDeductions}
+                setOpenState={setOpenEditDeduction}
+              />
+              <DeleteDeductionDialog
+                id={deductionId}
+                openState={openDeleteDeduction}
+                setOpenState={setOpenDeleteDeduction}
+                refetchDeductions={refetchDeductions}
+              />
             </div>
             <DeductionTable
               deductions={deductions.data}
@@ -164,6 +189,8 @@ const Tunjangan = () => {
               openState={openEditDeduction}
               setDeductionId={setDeductionId}
               setOpenState={setOpenEditDeduction}
+              openDeleteDeduction={openDeleteDeduction}
+              setOpenDeleteDeduction={setOpenDeleteDeduction}
             />
           </div>
         )}
