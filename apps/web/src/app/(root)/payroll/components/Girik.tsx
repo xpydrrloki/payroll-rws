@@ -15,9 +15,9 @@ const Girik = () => {
   return (
     <Document>
       <Page
-        size="A5"
+        size="A6"
         style={tw('p-4 flex flex-row flex-wrap gap-4')}
-        orientation={'landscape'}
+        orientation={'portrait'}
       >
         {[...Array(12)].map((_, i) => (
           <View

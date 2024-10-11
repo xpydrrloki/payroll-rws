@@ -36,7 +36,7 @@ const Employees = () => {
     setPage(newPage);
 
     // Update the URL without reloading the page
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     params.set('page', String(newPage));
     router.replace(`${pathname}?${params}`);
   };
