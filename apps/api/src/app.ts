@@ -15,6 +15,8 @@ import { AttendanceRouter } from './routers/attendance.router';
 import { scheduleAttendanceTask } from './libs/scheduleAttendance';
 import { AllowanceRouter } from './routers/allowance.router';
 import { DeductionRouter } from './routers/deduction.router';
+import { schedulePayrollTask } from './libs/schedulePayroll';
+import { PayrollRouter } from './routers/payroll.controller';
 
 export default class App {
   private app: Express;
@@ -63,6 +65,7 @@ export default class App {
     const attendanceRouter = new AttendanceRouter()
     const allowanceRouter = new AllowanceRouter()
     const deductionRouter = new DeductionRouter()
+    const payrollRouter = new PayrollRouter()
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Welcome to Personalia Application`);
@@ -74,10 +77,12 @@ export default class App {
     this.app.use('/api/attendance', attendanceRouter.getRouter());
     this.app.use('/api/allowance', allowanceRouter.getRouter());
     this.app.use('/api/deduction', deductionRouter.getRouter());
+    this.app.use('/api/payroll', payrollRouter.getRouter());
   }
   private schedules(): void{
   //  scheduleAttendanceTask()
   // JANGAN LUPA DINYALAIN LAGI
+  schedulePayrollTask()
   }
 
   public start(): void {

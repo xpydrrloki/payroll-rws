@@ -1,16 +1,16 @@
 'use client';
 import useGetAllowances from '@/hooks/api/allowance/useGetAllowances';
 import React, { useEffect, useState } from 'react';
-import AllowanceTable from './components/allowance/AllowanceTable';
 import { RowSelectionState } from '@tanstack/react-table';
 import Pagination from '@/components/Pagination';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import useGetDeductions from '@/hooks/api/deduction/useGetDeductions';
-import DeductionTable from './components/deduction/DeductionTable';
 import CreateAllowanceDialog from './components/allowance/CreateAllowanceDialog';
 import CreateDeductionDialog from './components/deduction/CreateDeductionDialog';
-import EditAllowanceDialog from './components/allowance/EditAllowanceDialog';
 import EditDeductionDialog from './components/deduction/EditDeductionDialog';
+import EditAllowanceDialog from './components/allowance/EditAllowanceDialog';
+import DeductionTable from './components/deduction/DeductionTable';
+import AllowanceTable from './components/allowance/AllowanceTable';
 import DeleteAllowanceDialog from './components/allowance/DeleteAllowanceDialog';
 import DeleteDeductionDialog from './components/deduction/DeleteDeductionDialog';
 

@@ -53,7 +53,7 @@ const Attendance = () => {
     setPage(newPage);
 
     // Update the URL without reloading the page
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     params.set('page', String(newPage));
     router.replace(`${pathname}?${params}`);
   };
@@ -61,7 +61,7 @@ const Attendance = () => {
   const handleDateChange = (newDate: Date | undefined) => {
     setDate(newDate);
 
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     if (newDate) {
       params.set('date', newDate.toISOString()); // Add date to query params
     } else {
